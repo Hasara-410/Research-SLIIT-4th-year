@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- MAP AREA -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Map Fragment -->
+        <fragment
+            android:id="@+id/mapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Legend -->
+        <LinearLayout
+            android:id="@+id/legendLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_margin="12dp"
+            android:background="@android:color/white"
+            android:elevation="6dp"
+            android:layout_gravity="top|start">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/legend_green" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VISITED"
+                    android:textStyle="bold"
+                    android:textColor="#22B14C"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/legend_red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NOT VISITED"
+                    android:textStyle="bold"
+                    android:textColor="#FF0000"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Refresh Button -->
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refresh"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="12dp"
+            android:textStyle="bold"
+            android:textColor="#0AEFDD"
+            android:background="@android:color/transparent"
+            android:backgroundTint="#FFFFFF"
+            android:elevation="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnProgress"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="12dp"
+            android:background="@drawable/circle_button_bg"
+            android:src="@drawable/ic_progress"
+            android:contentDescription="Progress"
+            android:padding="10dp"
+            android:scaleType="centerInside"/>
+
+
+
+
+        <!-- Progress Icon Button (TOP RIGHT) -->
+
+    </FrameLayout>
+
+    <!-- BOTTOM PANEL -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waiting for location..."
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Status: Checking..."
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnScanQr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan QR"
+            android:backgroundTint="#22B14C"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btnOpenAi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ask Heritage AI"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="#9E9E9E"
+            android:enabled="false"/>
+    </LinearLayout>
+
+</LinearLayout>

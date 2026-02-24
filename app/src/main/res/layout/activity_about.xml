@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- Centered Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="About Us"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/lanka_green_dark"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvAboutText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#7A7A7A"
+            android:textSize="15sp"
+            android:lineSpacingExtra="6dp"
+            android:text="This app is designed to bring history to life through modern technology.
+
+It allows users to explore archaeological and heritage sites in an interactive way using Mixed Reality, real-time location tracking, AI-based reconstruction, and gamified experiences.
+
+Users can discover hidden stories, view reconstructed ancient inscriptions, and navigate sites with smart maps.
+
+The app also helps youth and travelers engage with history in a fun and meaningful way.
+
+By combining education and exploration, this app makes learning about the past simple, immersive, and exciting for everyone.
+
+This app is designed to bring history to life through modern technology.
+
+It allows users to explore archaeological and heritage sites in an interactive way using Mixed Reality, real-time location tracking, AI-based reconstruction, and gamified experiences.
+
+Users can discover hidden stories, view reconstructed ancient inscriptions, and navigate sites with smart maps.
+
+The app also helps youth and travelers engage with history in a fun and meaningful way.
+
+By combining education and exploration, this app makes learning about the past simple, immersive, and exciting for everyone."/>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

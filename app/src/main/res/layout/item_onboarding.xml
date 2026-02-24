@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- Top image -->
+    <ImageView
+        android:id="@+id/imgOnboarding"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_weight="5"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_onboarding_sample" />
+
+    <!-- Bottom card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step into Ancient Lanka"
+            android:textColor="@color/lanka_green_dark"
+            android:layout_marginTop="15dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Experience the magic Sri Lanka’s rich heritage in full 3D, anywhere, anytime, with LankaLens."
+            android:textColorLink="#6B7280"
+            android:textSize="14sp"
+            android:textAlignment="center"/>
+
+
+
+
+
+   </LinearLayout>
+
+</LinearLayout>
