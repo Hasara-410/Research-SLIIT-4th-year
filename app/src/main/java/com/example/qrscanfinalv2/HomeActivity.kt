@@ -19,9 +19,15 @@ class HomeActivity : AppCompatActivity() {
         val btnInscription = findViewById<View>(R.id.btnInscription)
         val btnGame = findViewById<View>(R.id.btnGame)
 
-        btnMr.setOnClickListener {
-            startActivity(Intent(this, MrReconstructionActivity::class.java))
-        }
+        // btnMr.setOnClickListener {
+        //    val intent = packageManager.getLaunchIntentForPackage("com.UnityTechnologies.com.unity.template.urpblank")
+        //
+        //    if (intent != null) {
+        //        startActivity(intent)
+        //    } else {
+        //        Toast.makeText(this, "App not installed", Toast.LENGTH_SHORT).show()
+        //    }
+        // }
 
         btnMap.setOnClickListener {
             // ✅ open your map component
