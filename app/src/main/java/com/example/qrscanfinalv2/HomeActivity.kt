@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -19,15 +20,15 @@ class HomeActivity : AppCompatActivity() {
         val btnInscription = findViewById<View>(R.id.btnInscription)
         val btnGame = findViewById<View>(R.id.btnGame)
 
-        // btnMr.setOnClickListener {
-        //    val intent = packageManager.getLaunchIntentForPackage("com.UnityTechnologies.com.unity.template.urpblank")
-        //
-        //    if (intent != null) {
-        //        startActivity(intent)
-        //    } else {
-        //        Toast.makeText(this, "App not installed", Toast.LENGTH_SHORT).show()
-        //    }
-        // }
+         btnMr.setOnClickListener {
+            val intent = packageManager.getLaunchIntentForPackage("com.UnityTechnologies.com.unity.template.urpblank")
+
+            if (intent != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "App not installed", Toast.LENGTH_SHORT).show()
+            }
+         }
 
         btnMap.setOnClickListener {
             // ✅ open your map component
