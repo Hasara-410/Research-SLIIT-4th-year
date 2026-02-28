@@ -13,6 +13,10 @@
         android:name="android.hardware.camera.any"
         android:required="false" />
 
+    <queries>
+        <package android:name="com.UnityTechnologies.com.unity.template.urpblank" />
+    </queries>
+
 
     <application
         android:allowBackup="true"
@@ -26,12 +30,10 @@
         tools:targetApi="31">
 
 
-
         <activity android:name=".EditProfileActivity" />
 
 
         <activity android:name=".ResetEmailSentActivity" />
-
 
 
         <activity
@@ -102,6 +104,12 @@
             android:exported="false" />
         <activity
             android:name=".ArtifactInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PreQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WaitingActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
