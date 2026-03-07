@@ -42,6 +42,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         btnSignUp.setOnClickListener {
+
             val name = etName.text?.toString()?.trim().orEmpty()
             val email = etEmail.text?.toString()?.trim().orEmpty()
             val pass = etPassword.text?.toString()?.trim().orEmpty()
@@ -49,26 +50,32 @@ class SignUpActivity : AppCompatActivity() {
             val phone = etPhone.text?.toString()?.trim().orEmpty()
 
             if (name.isBlank() || email.isBlank() || pass.isBlank() || confirm.isBlank() || phone.isBlank()) {
-                toast("Please fill all fields"); return@setOnClickListener
+                toast("Please fill all fields")
+                return@setOnClickListener
             }
             if (pass.length < 6) {
-                toast("Password must be at least 6 characters"); return@setOnClickListener
+                toast("Password must be at least 6 characters")
+                return@setOnClickListener
             }
             if (pass != confirm) {
-                toast("Passwords do not match"); return@setOnClickListener
+                toast("Passwords do not match")
+                return@setOnClickListener
             }
 
             btnSignUp.isEnabled = false
 
+
             auth.createUserWithEmailAndPassword(email, pass)
                 .addOnSuccessListener { res ->
+
+
                     val uid = res.user?.uid ?: run {
                         btnSignUp.isEnabled = true
+
                         toast("Signup failed (no UID)")
                         return@addOnSuccessListener
                     }
 
-                    // Save profile to Firestore under users/{uid}
                     val userDoc = db.collection("users").document(uid)
                     val data = hashMapOf(
                         "name" to name,
@@ -79,17 +86,19 @@ class SignUpActivity : AppCompatActivity() {
 
                     userDoc.set(data)
                         .addOnSuccessListener {
-                            toast("Account created!")
+                            toast("Profile saved")
                             startActivity(Intent(this, HomeActivity::class.java))
                             finish()
                         }
                         .addOnFailureListener { e ->
                             btnSignUp.isEnabled = true
+
                             toast("Profile save failed: ${e.message}")
                         }
                 }
                 .addOnFailureListener { e ->
                     btnSignUp.isEnabled = true
+
                     toast("Signup failed: ${e.message}")
                 }
         }
