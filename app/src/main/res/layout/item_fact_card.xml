@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <androidx.cardview.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardFact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp">
+
+            <!-- Emoji -->
+            <TextView
+                android:id="@+id/tvFactEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏛️"
+                android:textSize="72sp"/>
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvFactTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fact Title"
+                android:textSize="22sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="20dp"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="48dp"
+                android:layout_height="2dp"
+                android:background="#4CAF50"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Fact content -->
+            <TextView
+                android:id="@+id/tvFactContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fact content here"
+                android:textSize="15sp"
+                android:textColor="#CCCCCC"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.5"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Swipe hint -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="← Swipe to explore →"
+                android:textSize="11sp"
+                android:textColor="#555555"
+                android:layout_marginTop="32dp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

@@ -168,7 +168,7 @@ class PreQuizActivity : AppCompatActivity() {
             )
             .addOnSuccessListener {
                 showLoading(false)
-                val intent = Intent(this, WaitingActivity::class.java)
+                val intent = Intent(this, PreQuizResultActivity::class.java)
                 intent.putExtra("step", 1)
                 intent.putExtra("preQuizScore", score)
                 startActivity(intent)

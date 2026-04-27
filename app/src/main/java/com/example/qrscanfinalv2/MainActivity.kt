@@ -37,6 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.Source
 import java.util.Locale
+import com.google.firebase.firestore.FieldValue
 
 // -------------------- DATA CLASSES --------------------
 data class Location(
@@ -86,6 +87,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var inRangeZoneName: String? = null
     private var inRangePlaceName: String? = null
 
+    private var zoneEnterStartMs: Long? = null
+    private var placeEnterStartMs: Long? = null
+
     // Offline visited storage
     private val prefs by lazy { getSharedPreferences("offline_visited", MODE_PRIVATE) }
     private fun zoneKey(zoneId: String) = "ZONE:$zoneId"
@@ -107,16 +111,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // -------------------- YOUR ZONES/PLACES --------------------
     private val zones = listOf(
-        Location("SLIIT Malabe", 6.914677, 79.973206, 500.0, false),
+        //Location("SLIIT Malabe", 6.914677, 79.973206, 500.0, false),
         Location("Sigiriya", 7.956944, 80.759722, 1000.0, false),
-        Location("My Home", 7.5772812, 80.4509638, 500.0, false),
+        //Location("My Home", 7.5772812, 80.4509638, 500.0, false),
     )
 
     private val zonePlaceMap = mapOf(
-        "SLIIT Malabe" to listOf(
-            Place("SLIIT Main Building", 6.914678, 79.973208, 50.0, false),
-            Place("SLIIT New Building", 6.9155, 79.9739, 50.0, false)
-        ),
+//        "SLIIT Malabe" to listOf(
+//            Place("SLIIT Main Building", 6.914678, 79.973208, 50.0, false),
+//            Place("SLIIT New Building", 6.9155, 79.9739, 50.0, false)
+//        ),
         "Sigiriya" to listOf(
             Place("Sigiriya Museum", 7.956970, 80.751570, 80.0, false),
             Place("Water Gardens", 7.956819, 80.755592, 80.0, false),
@@ -126,10 +130,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             Place("Lion Gate", 7.957565, 80.759900, 40.0, false),
             Place("Summit", 7.957201, 80.759068, 40.0, false)
         ),
-        "My Home" to listOf(
-            Place("Main Gate", 7.5772998, 80.4511324, 15.0, false),
-            Place("Gate2", 7.5771083, 80.4510794, 15.0, false)
-        ),
+//        "My Home" to listOf(
+//            Place("Main Gate", 7.5772998, 80.4511324, 15.0, false),
+//            Place("Gate2", 7.5771083, 80.4510794, 15.0, false)
+//        ),
     )
 
     private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
@@ -376,6 +380,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.lastLocation?.let { loc ->
+                Log.d("GPS_METRICS", "acc=${loc.accuracy}m lat=${loc.latitude} lng=${loc.longitude}")
                 val lat = loc.latitude
                 val lng = loc.longitude
                 locationTextView.text = "Lat: $lat, Lng: $lng"
@@ -383,13 +388,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 val currentLatLng = LatLng(lat, lng)
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16f))
 
-                checkZoneAndPlaces(lat, lng)
+                checkZoneAndPlaces(lat, lng, loc.accuracy)
             }
         }
     }
 
     // GPS ONLY: detect current zone/place
-    private fun checkZoneAndPlaces(currentLat: Double, currentLng: Double) {
+    private fun checkZoneAndPlaces(currentLat: Double, currentLng: Double, gpsAccuracy: Float) {
         if (liveZones.isEmpty()) {
             loadLocalZonesIntoLive()
             drawFromLiveData()
@@ -414,8 +419,41 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+        val prevZone = inRangeZoneName
+        val prevPlace = inRangePlaceName
+
         inRangeZoneName = currentZoneName
         inRangePlaceName = currentPlaceName
+
+        // -------------------- EVALUATION METRICS (AUTO) --------------------
+
+// ZONE enter timing
+        if (prevZone != currentZoneName) {
+            // leaving zone or switching zone -> reset start time
+            zoneEnterStartMs = if (currentZoneName != null) System.currentTimeMillis() else null
+        } else {
+            // still in same zone -> keep time
+            if (currentZoneName != null && zoneEnterStartMs == null) zoneEnterStartMs = System.currentTimeMillis()
+        }
+
+// PLACE enter timing
+        if (prevPlace != currentPlaceName) {
+            placeEnterStartMs = if (currentPlaceName != null) System.currentTimeMillis() else null
+        } else {
+            if (currentPlaceName != null && placeEnterStartMs == null) placeEnterStartMs = System.currentTimeMillis()
+        }
+
+// Log zone event (only when we newly enter a zone)
+        if (prevZone == null && currentZoneName != null) {
+            val delaySec = ((System.currentTimeMillis() - (zoneEnterStartMs ?: System.currentTimeMillis())) / 1000.0)
+            recordEvaluation("ZONE", currentZoneName, null, gpsAccuracy, delaySec)
+        }
+
+// Log place event (only when we newly enter a place)
+        if (prevPlace == null && currentPlaceName != null && currentZoneName != null) {
+            val delaySec = ((System.currentTimeMillis() - (placeEnterStartMs ?: System.currentTimeMillis())) / 1000.0)
+            recordEvaluation("PLACE", currentZoneName, currentPlaceName, gpsAccuracy, delaySec)
+        }
 
         // Store last zone for progress screen fallback
         if (currentZoneName != null) {
@@ -667,7 +705,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         ) return
 
         fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
-            if (loc != null) checkZoneAndPlaces(loc.latitude, loc.longitude)
+            if (loc != null) checkZoneAndPlaces(loc.latitude, loc.longitude, loc.accuracy)
         }
     }
 
@@ -856,5 +894,74 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             ),
             SetOptions.merge()
         )
+    }
+
+    private fun logGeofenceEvaluation(
+        type: String,              // "ZONE" or "PLACE"
+        zone: String,
+        place: String?,
+        gpsAccuracy: Float,
+        detectionDelaySec: Double
+    ) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous"
+
+        val data = hashMapOf(
+            "uid" to uid,
+            "type" to type,
+            "zone" to zone,
+            "place" to (place ?: ""),
+            "gpsAccuracyMeters" to gpsAccuracy.toDouble(),
+            "detectionDelaySec" to detectionDelaySec,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("geofence_evaluation")
+            .add(data)
+            .addOnFailureListener { e ->
+                Log.e("GEOFENCE_EVAL", "Failed to write evaluation log", e)
+            }
+    }
+
+    private fun updateEvaluationSummary(
+        type: String,
+        zone: String,
+        place: String?,
+        gpsAccuracy: Double,
+        delaySec: Double
+    ) {
+        val summaryRef = db.collection("geofence_summary").document("main")
+
+        val updateMap = hashMapOf<String, Any>(
+            "totalCount" to FieldValue.increment(1),
+            "sumAccuracy" to FieldValue.increment(gpsAccuracy),
+            "sumDelay" to FieldValue.increment(delaySec)
+        )
+
+        // zone level
+        updateMap["zones.$zone.count"] = FieldValue.increment(1)
+        updateMap["zones.$zone.sumAccuracy"] = FieldValue.increment(gpsAccuracy)
+        updateMap["zones.$zone.sumDelay"] = FieldValue.increment(delaySec)
+
+        // place level (optional)
+        if (!place.isNullOrBlank()) {
+            val key = "${zone}__${place}".replace(".", "_")
+            updateMap["places.$key.count"] = FieldValue.increment(1)
+            updateMap["places.$key.sumAccuracy"] = FieldValue.increment(gpsAccuracy)
+            updateMap["places.$key.sumDelay"] = FieldValue.increment(delaySec)
+        }
+
+        summaryRef.set(updateMap, SetOptions.merge())
+    }
+
+
+    private fun recordEvaluation(
+        type: String,
+        zone: String,
+        place: String?,
+        gpsAccuracy: Float,
+        detectionDelaySec: Double
+    ) {
+        logGeofenceEvaluation(type, zone, place, gpsAccuracy, detectionDelaySec)
+        updateEvaluationSummary(type, zone, place, gpsAccuracy.toDouble(), detectionDelaySec)
     }
 }
