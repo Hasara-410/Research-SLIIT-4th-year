@@ -63,6 +63,8 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.3.4")
     implementation("androidx.camera:camera-lifecycle:1.3.4")
     implementation("androidx.camera:camera-view:1.3.4")
+    //for uploading image
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // ML Kit Barcode
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
